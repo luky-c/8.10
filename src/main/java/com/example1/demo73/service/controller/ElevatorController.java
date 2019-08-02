@@ -28,6 +28,7 @@ public class ElevatorController {
 	@Authorization
 	@RequestMapping(value = "/add",method = RequestMethod.POST)
 	public String addElevator(@RequestBody Elevator Elevator){
+		Elevator.setType("Elevator");
 		long id = (long) Math.random();
 		Random r = new Random();
 		while(manager.checkElevator(id)!=null){		

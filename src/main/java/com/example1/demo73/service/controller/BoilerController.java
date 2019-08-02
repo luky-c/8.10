@@ -27,6 +27,7 @@ public class BoilerController {
 	@Authorization
 	@RequestMapping(value = "/add",method = RequestMethod.POST)
 	public String addBoiler(@RequestBody Boiler boiler){
+		boiler.setType("Boiler");
 		System.out.print(boiler.getCorpnName());
 		Random r = new Random();
 		Long id = (long) Math.random();

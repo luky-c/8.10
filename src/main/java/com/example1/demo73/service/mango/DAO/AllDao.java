@@ -6,5 +6,6 @@ import model.ShowModel;
 
 public interface AllDao {
 	public List<ShowModel> getALL();
+	
 
 }

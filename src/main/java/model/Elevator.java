@@ -13,7 +13,7 @@ public class Elevator{
     private String address;//制造地址
     private String prinpal;//单位负责人
     private long phoneNo;//联系电话
-    private String licenceNo;//许可证编号
+    private Long licenceNo;//许可证编号
     private long fax;//传真
     private String licenceDate;//许可证有效期
     private String licenceRange;//许可的范围
@@ -317,10 +317,10 @@ public class Elevator{
 	public void setPhoneNo(long phoneNo) {
 		this.phoneNo = phoneNo;
 	}
-	public String getLicenceNo() {
+	public Long getLicenceNo() {
 		return licenceNo;
 	}
-	public void setLicenceNo(String licenceNo) {
+	public void setLicenceNo(Long licenceNo) {
 		this.licenceNo = licenceNo;
 	}
 	public long getFax() {

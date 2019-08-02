@@ -25,6 +25,7 @@ public class CraneController {
 	@Authorization
 	@RequestMapping(value = "/add",method = RequestMethod.POST)
 	public String addCrane(@RequestBody Crane Crane){
+		Crane.setType("Crane");
 		long id = (long) Math.random();
 		Random r = new Random();
 		while(manager.checkCrane(id)!=null){		
