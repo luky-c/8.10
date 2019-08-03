@@ -1,12 +1,28 @@
 package model;
 
 public class UniteCheckModel {
-    private String type;
+    private String id;
+	private String type;
     private String inspection;
     private String content;
     private String result;
     private String corpnName;
     private String problem;
+    private String problemresult;
+    
+    public String getProblemresult(){
+    	return this.problemresult;
+    }
+    public void setProblemresult(String ps){
+    	this.problemresult = ps;
+    }
+    
+    public String getId(){
+    	return this.id;
+    }
+    public void setId(String id){
+    	this.id=id;
+    }
 	public String getType() {
         return type;
     }

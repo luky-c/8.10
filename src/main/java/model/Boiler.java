@@ -3,7 +3,7 @@ package model;
  *锅炉压力容容器制造单位监督检查记录表
  */
 public class Boiler {
-	private Long id;
+	private String id;
 	private String type;
     /*
      *表头
@@ -159,14 +159,14 @@ public class Boiler {
     public void setType(String type){
     	this.type=type;
     }
-    public Long getId(){
+    public String getId(){
     	return this.id;
     }
-    public void setId(Long id){
+    public void setId(String id){
     	this.id=id;
     }
 
-    public long getSerialNo() {
+    public Long getSerialNo() {
         return serialNo;
     }
 

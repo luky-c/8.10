@@ -26,7 +26,7 @@ public class BoilerDaoImp implements BoilerDao{
 		private MongoTemplate mongoTemplate;
 		
 		@Override
-		public void addNewBoiler(Boiler boiler,Long id){
+		public void addNewBoiler(Boiler boiler,String id ){
 			boiler.setId(id);
 			mongoTemplate.insert(boiler, "BoilerCollection");			
 		}
@@ -38,7 +38,7 @@ public class BoilerDaoImp implements BoilerDao{
 			mongoTemplate.upsert(query, update, "BoilerCollection");						
 		}
 		@Override
-		public Boiler checkBoiler(long id){
+		public Boiler checkBoiler(String id){
 			
 		//	Query query = Query.query(Criteria.where("_id").is(id));
 			
@@ -49,14 +49,14 @@ public class BoilerDaoImp implements BoilerDao{
 			return boiler;
 		}
 		@Override
-		public void deleteBoiler(long id){
+		public void deleteBoiler(String id){
 		
 			Query query = Query.query(Criteria.where("_id").is(id));
 			mongoTemplate.remove(query, Boiler.class, "BoilerCollection");
 		}
 		
-		public List<Long> checkID(String Corpnname){
-			List<Long> list = new ArrayList<Long>();
+		public List<String> checkID(String Corpnname){
+			List<String> list = new ArrayList<String>();
 			
 			
 			Query query = new Query();

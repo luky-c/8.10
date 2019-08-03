@@ -25,7 +25,7 @@ public class ElevatorDaoImp implements ElevatorDao{
 		private MongoTemplate mongoTemplate;
 		
 		@Override
-		public void addNewElevator(Elevator Elevator,long id){
+		public void addNewElevator(Elevator Elevator,String id){
 			Elevator.setId(id);
 			mongoTemplate.insert(Elevator, "ElevatorCollection");			
 		}
@@ -37,19 +37,19 @@ public class ElevatorDaoImp implements ElevatorDao{
 			mongoTemplate.upsert(query, update, "ElevatorCollection");						
 		}
 		@Override
-		public Elevator checkElevator(long id){
+		public Elevator checkElevator(String id){
 		//	Query query = Query.query(Criteria.where("id").is(id));
 			Elevator Elevator =  mongoTemplate.findById(id, Elevator.class, "ElevatorCollection");
 			return Elevator;
 		}
 		@Override
-		public void deleteElevator(long id){
+		public void deleteElevator(String id){
 			Query query = Query.query(Criteria.where("_id").is(id));
 			mongoTemplate.remove(query, Elevator.class, "ElevatorCollection");
 		}
 		
-		public List<Long> checkID(String corpnName){
-			List<Long> list = new ArrayList<Long>();
+		public List<String> checkID(String corpnName){
+			List<String> list = new ArrayList<String>();
 			Query query = Query.query(Criteria.where("corpnName").is(corpnName));
 			List<Elevator> Elist = mongoTemplate.find(query, Elevator.class,"ElevatorCollection");
 			for(Elevator elevator : Elist){

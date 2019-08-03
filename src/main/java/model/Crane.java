@@ -4,7 +4,7 @@ package model;
  */
 
 public class Crane{
-    private Long id;
+    private String id;
     private String type;
     /*
      *表头
@@ -144,10 +144,10 @@ public class Crane{
     public void setType(String type){
     	this.type=type;
     }
-    public Long getId(){
+    public String getId(){
     	return this.id;
     }
-    public void setId(Long id){
+    public void setId(String id){
     	this.id=id;
     }
     public String getCorpnName() {

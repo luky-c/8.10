@@ -24,7 +24,7 @@ public class CraneDaoImp implements CraneDao{
 		private MongoTemplate mongoTemplate;
 		
 		@Override
-		public void addNewCrane(Crane Crane,long id){
+		public void addNewCrane(Crane Crane,String id){
 			Crane.setId(id);
 			mongoTemplate.insert(Crane, "CraneCollection");			
 		}
@@ -36,18 +36,18 @@ public class CraneDaoImp implements CraneDao{
 			mongoTemplate.upsert(query, update, "CraneCollection");						
 		}
 		@Override
-		public Crane checkCrane(long id){
+		public Crane checkCrane(String id){
 		//	Query query = Query.query(Criteria.where("id").is(id));
 			Crane Crane =  mongoTemplate.findById(id, Crane.class, "CraneCollection");
 			return Crane;
 		}
 		@Override
-		public void deleteCrane(long id){
+		public void deleteCrane(String id){
 			Query query = Query.query(Criteria.where("_id").is(id));
 			mongoTemplate.remove(query, Crane.class, "CraneCollection");
 		}
-		public List<Long> checkID(String corpnName){
-			List<Long> list = new ArrayList<Long>();
+		public List<String> checkID(String corpnName){
+			List<String> list = new ArrayList<String>();
 			Query query = Query.query(Criteria.where("corpnName").is(corpnName));
 			List<Crane> Clist = mongoTemplate.find(query, Crane.class,"CraneCollection");
 			for(Crane crane : Clist){

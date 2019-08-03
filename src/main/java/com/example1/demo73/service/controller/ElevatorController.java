@@ -3,6 +3,7 @@ package com.example1.demo73.service.controller;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,11 +30,10 @@ public class ElevatorController {
 	@RequestMapping(value = "/add",method = RequestMethod.POST)
 	public String addElevator(@RequestBody Elevator Elevator){
 		Elevator.setType("Elevator");
-		long id = (long) Math.random();
-		Random r = new Random();
-		while(manager.checkElevator(id)!=null){		
-		id = (long) (r.nextInt(1000)%(1001));;
-		}
+		UUID uuid=UUID.randomUUID();
+	    String str = uuid.toString(); 
+	    String id=str.replace("-", "");
+
 		manager.addNewElevator(Elevator, id);
 		return "success";
 	}
@@ -50,13 +50,13 @@ public class ElevatorController {
 	
 	@Authorization
 	@RequestMapping(value = "/check",method = RequestMethod.GET)
-	public Elevator checkElevator(@RequestParam Long id){
+	public Elevator checkElevator(@RequestParam String id){
 		return manager.checkElevator(id);
 	}
 	
 	@Authorization
 	@RequestMapping(value = "/delete",method = RequestMethod.DELETE)
-	public String deleteElevator(@RequestParam Long id){
+	public String deleteElevator(@RequestParam String id){
 		if(manager.checkElevator(id) == null){
 			return "fail";
 		}
@@ -66,7 +66,7 @@ public class ElevatorController {
 	
 	@Authorization
 	@RequestMapping(value = "/checkID",method = RequestMethod.GET)
-	public List<Long> checkID(@RequestParam String corpnName){
+	public List<String> checkID(@RequestParam String corpnName){
 		return manager.checkID(corpnName);
 	}
 	@Authorization

@@ -3,6 +3,7 @@ package com.example1.demo73.service.controller;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,15 +29,10 @@ public class BoilerController {
 	@RequestMapping(value = "/add",method = RequestMethod.POST)
 	public String addBoiler(@RequestBody Boiler boiler){
 		boiler.setType("Boiler");
-		System.out.print(boiler.getCorpnName());
-		Random r = new Random();
-		Long id = (long) Math.random();
-		while(manager.checkBoiler(id)!=null){	
-		
-		id = (long) (r.nextInt(1000)%(1001));
-		
-		}
-		System.out.print(id);
+	    UUID uuid=UUID.randomUUID();
+	    String str = uuid.toString(); 
+	    String id=str.replace("-", "");
+
 		
 		manager.addNewBoiler(boiler,id);
 		return "success";
@@ -54,13 +50,13 @@ public class BoilerController {
 	
 	@Authorization
 	@RequestMapping(value = "/check",method = RequestMethod.GET)
-	public Boiler checkBoiler(@RequestParam Long id){
+	public Boiler checkBoiler(@RequestParam String id){
 		return manager.checkBoiler(id);
 	}
 	
 	@Authorization
 	@RequestMapping(value = "/delete",method = RequestMethod.DELETE)
-	public String deleteBoiler(@RequestParam Long id){
+	public String deleteBoiler(@RequestParam String id){
 		if(manager.checkBoiler(id) == null){
 			return "fail";
 		}
@@ -70,7 +66,7 @@ public class BoilerController {
 	
 	@Authorization
 	@RequestMapping(value = "/checkID",method = RequestMethod.GET)
-	public List<Long> checkID(@RequestParam String Corpnname){
+	public List<String> checkID(@RequestParam String Corpnname){
 		return manager.checkID(Corpnname);
 	}
 	

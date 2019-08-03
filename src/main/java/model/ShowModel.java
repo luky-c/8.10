@@ -5,7 +5,7 @@ public class ShowModel {
 	private String prinpal;
 	private long licenceNo;
 	private String type;
-	private Long id;
+	private String id;
 	
 	public ShowModel(){}
 	public ShowModel(Boiler boiler){
@@ -37,10 +37,10 @@ public class ShowModel {
     public void setType(String type){
     	this.type=type;
     }
-    public Long getId(){
+    public String getId(){
     	return this.id;
     }
-    public void setId(Long id){
+    public void setId(String id){
     	this.id=id;
     }
     
