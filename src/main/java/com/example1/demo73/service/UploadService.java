@@ -49,39 +49,6 @@ public class UploadService {
         return "-1";
     }
 
-    /**
-     *
-     * @param file
-     * @param fileId
-     * @return
-     */
-    public String updateFile(MultipartFile file, String fileId) {
-        if (!file.isEmpty()) {
-            try {
-                //1.先查找原来的文件,删除,这一步后续可以修改为异步操作
-                //改为先修改数据库中的文件路径后再删除，一面修改不成功删掉原来的图片
-                SaveFileModel origin = saveFileDaoImpl.findById(fileId);
-
-                //2.保存新文件
-                //为防止重名，加入五位随机数
-                String fileName = filePath + RandomStringUtils.randomAlphanumeric(5) + "_" + file.getOriginalFilename();
-                byte[] bytes = file.getBytes();
-                Path path = Paths.get(fileName);
-                Files.write(path, bytes);
-                SaveFileModel saveFileModel = new SaveFileModel();
-                saveFileModel.setId(fileId);
-                saveFileModel.setFilePath(fileName);
-                saveFileDaoImpl.updateDataById(saveFileModel);
-
-                //删除
-                FileUtil.deleteContents(new File(origin.getFilePath()));
-                return saveFileModel.getId();
-            } catch (IOException e) {
-                log.error("文件保存出错 ", e);
-            }
-        }
-        return "-1";
-    }
 
     public byte[] getFileById(String id) {
         SaveFileModel saveFileModel = saveFileDaoImpl.findById(id);
@@ -100,5 +67,18 @@ public class UploadService {
             log.error("读取文件出错 文件id:{}", id,  e);
         }
         return null;
+    }
+
+    public boolean deletePic(String id) {
+        try {
+            //mongo中删除
+            SaveFileModel saveFileModel = saveFileDaoImpl.deleteById(id);
+            //文件中删除
+            FileUtil.deleteContents(new File(saveFileModel.getFilePath()));
+            return true;
+        }catch (Exception e) {
+            log.error("删除文件失败 ", e);
+        }
+        return false;
     }
 }

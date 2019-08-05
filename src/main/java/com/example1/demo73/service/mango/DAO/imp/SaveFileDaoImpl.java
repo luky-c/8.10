@@ -43,4 +43,9 @@ public class SaveFileDaoImpl {
         return CollectionUtils.isEmpty(saveFileModels) ? null : saveFileModels.get(0);
     }
 
+    public SaveFileModel deleteById(String id) {
+        Query query = Query.query(Criteria.where("_id").is(id));
+        return mongoTemplate.findAndRemove(query, SaveFileModel.class);
+    }
+
 }

@@ -28,29 +28,15 @@ public class UploadController {
     private UploadService uploadService;
 
     @RequestMapping(value = "/uploadPic" ,method = RequestMethod.POST)
-    public UploadFileResponse uploadPic(@RequestParam(value = "file") MultipartFile[] files, @RequestParam(value = "ids") List<String> fileIds) {
+    public UploadFileResponse uploadPic(@RequestParam(value = "file") MultipartFile[] files) {
         UploadFileResponse uploadFileResponse = new UploadFileResponse();
-        if(!CollectionUtils.isEmpty(fileIds) && files.length != fileIds.size()) {
-            uploadFileResponse.setCode(100);
-            return uploadFileResponse;
-        }
         List<String> ids = Lists.newArrayListWithCapacity(files.length);
         if( files.length > 0 ){
-            if( CollectionUtils.isEmpty(fileIds)) {
-                //循环获取file数组中得文件
-                for (int i = 0; i < files.length; i++) {
-                    MultipartFile file = files[i];
-                    //保存文件
-                    ids.add(uploadService.saveFile(files[i]));
-
-                }
-            }else {
-                for (int i = 0; i < files.length; i++) {
-                    MultipartFile file = files[i];
-                    //保存文件
-                    ids.add(uploadService.updateFile(files[i], fileIds.get(i)));
-
-                }
+            //循环获取file数组中得文件
+            for (int i = 0; i < files.length; i++) {
+                MultipartFile file = files[i];
+                //保存文件
+                ids.add(uploadService.saveFile(files[i]));
             }
         }
         uploadFileResponse.setCode(200);
@@ -65,10 +51,17 @@ public class UploadController {
         try(OutputStream os = response.getOutputStream()) {
             os.write(bytes);
             os.flush();
-            os.close();
         }catch (Exception e) {
             log.error("获取文件出错 ", e);
         }
 
+    }
+
+    @RequestMapping(value = "deletePic", method = RequestMethod.GET)
+    public String deletePic(@RequestParam String id) {
+        if(uploadService.deletePic(id)){
+            return "success";
+        }
+        return "fail";
     }
 }
