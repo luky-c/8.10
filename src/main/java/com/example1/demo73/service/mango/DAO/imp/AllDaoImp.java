@@ -6,6 +6,10 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -43,11 +47,21 @@ public class AllDaoImp implements AllDao{
 	}
 	
 	@Override
-	public List<ShowModel> getALL(){
+	public List<ShowModel> getALL(int pageIndex,int pageSize){
+		Pageable pageable = new PageRequest(pageIndex,pageSize);
 		List<ShowModel> list = new ArrayList<>();
-		List<Boiler> Blist = mongoTemplate.findAll(Boiler.class, "BoilerCollection");
-		List<Crane> Clist = mongoTemplate.findAll(Crane.class, "CraneCollection");
-		List<Elevator>Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+		Query bquery = Query.query(Criteria.where("_class").is("model.Boiler"));
+		Query cquery = Query.query(Criteria.where("_class").is("model.Crane"));
+		Query equery = Query.query(Criteria.where("_class").is("model.Elevator"));
+		bquery.with(pageable);
+		cquery.with(pageable);
+		equery.with(pageable);
+		bquery.with(new Sort(Direction.ASC,"id"));
+		cquery.with(new Sort(Direction.ASC,"id"));
+		equery.with(new Sort(Direction.ASC,"id"));
+		List<Boiler> Blist = mongoTemplate.find(bquery,Boiler.class, "BoilerCollection");
+		List<Crane> Clist = mongoTemplate.find(cquery,Crane.class, "CraneCollection");
+		List<Elevator>Elist = mongoTemplate.find(equery,Elevator.class, "ElevatorCollection");
 		for(Boiler boiler : Blist){
 			ShowModel showModel = new ShowModel(boiler);
 			list.add(showModel);
@@ -64,7 +78,7 @@ public class AllDaoImp implements AllDao{
 	}
 	
 	
-	public List<String> unitedSelectByResult(String type,String content,String result){
+	public List<ShowModel> unitedSelectByResult(String type,String content,String result,int pageIndex,int pageSize){
 		/*
 		String type = model.getType();
     	String inspection = model.getInspection();
@@ -73,32 +87,45 @@ public class AllDaoImp implements AllDao{
     	String corpnName = model.getCorpnName();
     	String problem = model.getProblem();
     	*/
-		List<String> idList = new ArrayList<>();
+		Pageable pageable = new PageRequest(pageIndex,pageSize);
+		List<ShowModel> idList = new ArrayList<>();
     	if(type.equals("Boiler")){
     //		List<Boiler> Blist = mongoTemplate.findAll(Boiler.class, "BoilerCollection");
-    		List<Boiler> blist = mongoTemplate.find (new Query(Criteria.where(content).is(result)),Boiler.class,"BoilerCollection");
+    		Query query = new Query(Criteria.where(content).is(result));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Boiler> blist = mongoTemplate.find (query,Boiler.class,"BoilerCollection");
     		for(Boiler boiler : blist){
-    			idList.add(boiler.getId());
+    			ShowModel showModel = new ShowModel(boiler);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Crane")){
    // 		List<Crane> clist = mongoTemplate.findAll(Crane.class, "CraneCollection");
-    		List<Crane> clist = mongoTemplate.find (new Query(Criteria.where(content).is(result)),Crane.class,"CraneCollection");
+    		Query query = new Query(Criteria.where(content).is(result));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Crane> clist = mongoTemplate.find (query,Crane.class,"CraneCollection");
     		for(Crane crane : clist){
-    			idList.add(crane.getId());
+    			ShowModel showModel = new ShowModel(crane);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Elevator")){
   //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
-    		List<Elevator> elist = mongoTemplate.find (new Query(Criteria.where(content).is(result)),Elevator.class,"ElevatorCollection");
+    		Query query = new Query(Criteria.where(content).is(result));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Elevator> elist = mongoTemplate.find (query,Elevator.class,"ElevatorCollection");
     		for(Elevator elevator : elist){
-    			idList.add(elevator.getId());
+    			ShowModel showModel = new ShowModel(elevator);
+    			idList.add(showModel);
     		}
     	}
     	return idList;
 
 	}
-	public List<String> unitedSelectByReuslt(String type,String content,String result,String corpnName){
+	public List<ShowModel> unitedSelectByReuslt(String type,String content,String result,String corpnName,int pageIndex,int pageSize){
 		/*
 		String type = model.getType();
     	String inspection = model.getInspection();
@@ -107,33 +134,48 @@ public class AllDaoImp implements AllDao{
     	String corpnName = model.getCorpnName();
     	String problem = model.getProblem();
     	*/
-		List<String> idList = new ArrayList<>();
+		Pageable pageable = new PageRequest(pageIndex,pageSize);
+		List<ShowModel> idList = new ArrayList<>();
     	if(type.equals("Boiler")){
     //		List<Boiler> Blist = mongoTemplate.findAll(Boiler.class, "BoilerCollection");
-    		List<Boiler> blist = mongoTemplate.find (new Query(Criteria.where(content).is(result).and("corpnName").is(corpnName)),Boiler.class,"BoilerCollection");
+    		Query query = new Query(Criteria.where(content).is(result).and("corpnName").is(corpnName));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+
+    		List<Boiler> blist = mongoTemplate.find (query,Boiler.class,"BoilerCollection");
     		for(Boiler boiler : blist){
-    			idList.add(boiler.getId());
+    			ShowModel showModel = new ShowModel(boiler);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Crane")){
    // 		List<Crane> clist = mongoTemplate.findAll(Crane.class, "CraneCollection");
-    		List<Crane> clist = mongoTemplate.find (new Query(Criteria.where(content).is(result).and("corpnName").is(corpnName)),Crane.class,"CraneCollection");
+    		Query query = new Query(Criteria.where(content).is(result).and("corpnName").is(corpnName));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Crane> clist = mongoTemplate.find (query,Crane.class,"CraneCollection");
     		for(Crane crane : clist){
-    			idList.add(crane.getId());
+    			ShowModel showModel = new ShowModel(crane);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Elevator")){
   //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
-    		List<Elevator> elist = mongoTemplate.find (new Query(Criteria.where(content).is(result).and("corpnName").is(corpnName)),Elevator.class,"ElevatorCollection");
+    		Query query = new Query(Criteria.where(content).is(result).and("corpnName").is(corpnName));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Elevator> elist = mongoTemplate.find (query,Elevator.class,"ElevatorCollection");
     		for(Elevator elevator : elist){
-    			idList.add(elevator.getId());
+    			
+    			ShowModel showModel = new ShowModel(elevator);
+    			idList.add(showModel);
     		}
     	}
     	return idList;
 
 	}
 	
-	public List<String> unitedSelectByProblem(String type,String problemresult,String problem,String corpnName){
+	public List<ShowModel> unitedSelectByProblem(String type,String problemresult,String problem,String corpnName,int pageIndex,int pageSize){
 		/*
 		String type = model.getType();
     	String inspection = model.getInspection();
@@ -142,28 +184,40 @@ public class AllDaoImp implements AllDao{
     	String corpnName = model.getCorpnName();
     	String problem = model.getProblem();
     	*/
-		List<String> idList = new ArrayList<>();
+		Pageable pageable = new PageRequest(pageIndex,pageSize);
+		List<ShowModel> idList = new ArrayList<>();
 		Pattern pattern = Pattern.compile("^.*"+problemresult+".*$", Pattern.CASE_INSENSITIVE);
     	if(type.equals("Boiler")){
     //		List<Boiler> Blist = mongoTemplate.findAll(Boiler.class, "BoilerCollection");
-    		
-    		List<Boiler> blist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern).and("corpnName").is(corpnName)),Boiler.class,"BoilerCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern).and("corpnName").is(corpnName));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Boiler> blist = mongoTemplate.find (query,Boiler.class,"BoilerCollection");
     		for(Boiler boiler : blist){
-    			idList.add(boiler.getId());
+    			ShowModel showModel = new ShowModel(boiler);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Crane")){
    // 		List<Crane> clist = mongoTemplate.findAll(Crane.class, "CraneCollection");
-    		List<Crane> clist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern).and("corpnName").is(corpnName)),Crane.class,"CraneCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern).and("corpnName").is(corpnName));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Crane> clist = mongoTemplate.find (query,Crane.class,"CraneCollection");
     		for(Crane crane : clist){
-    			idList.add(crane.getId());
+    			ShowModel showModel = new ShowModel(crane);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Elevator")){
   //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
-    		List<Elevator> elist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern).and("corpnName").is(corpnName)),Elevator.class,"ElevatorCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern).and("corpnName").is(corpnName));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Elevator> elist = mongoTemplate.find (query,Elevator.class,"ElevatorCollection");
     		for(Elevator elevator : elist){
-    			idList.add(elevator.getId());
+    			ShowModel showModel = new ShowModel(elevator);
+    			idList.add(showModel);
     		}
     	}
     	return idList;
@@ -171,7 +225,7 @@ public class AllDaoImp implements AllDao{
 	}
 	
 	
-	public List<String> unitedSelectByProblem(String type,String problemresult,String problem){
+	public List<ShowModel> unitedSelectByProblem(String type,String problemresult,String problem,int pageIndex, int pageSize){
 		/*
 		String type = model.getType();
     	String inspection = model.getInspection();
@@ -180,34 +234,47 @@ public class AllDaoImp implements AllDao{
     	String corpnName = model.getCorpnName();
     	String problem = model.getProblem();
     	*/
-		List<String> idList = new ArrayList<>();
+		Pageable pageable = new PageRequest(pageIndex,pageSize);
+		List<ShowModel> idList = new ArrayList<>();
 		Pattern pattern = Pattern.compile("^.*"+problemresult+".*$", Pattern.CASE_INSENSITIVE);
     	if(type.equals("Boiler")){
     //		List<Boiler> Blist = mongoTemplate.findAll(Boiler.class, "BoilerCollection");
-    		
-    		List<Boiler> blist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern)),Boiler.class,"BoilerCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Boiler> blist = mongoTemplate.find (query,Boiler.class,"BoilerCollection");
     		for(Boiler boiler : blist){
-    			idList.add(boiler.getId());
+    			ShowModel showModel = new ShowModel(boiler);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Crane")){
    // 		List<Crane> clist = mongoTemplate.findAll(Crane.class, "CraneCollection");
-    		List<Crane> clist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern)),Crane.class,"CraneCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Crane> clist = mongoTemplate.find (query,Crane.class,"CraneCollection");
     		for(Crane crane : clist){
-    			idList.add(crane.getId());
+    			ShowModel showModel = new ShowModel(crane);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Elevator")){
   //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
-    		List<Elevator> elist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern)),Elevator.class,"ElevatorCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Elevator> elist = mongoTemplate.find (query,Elevator.class,"ElevatorCollection");
     		for(Elevator elevator : elist){
-    			idList.add(elevator.getId());
+    			
+    			ShowModel showModel = new ShowModel(elevator);
+    			idList.add(showModel);
     		}
     	}
     	return idList;
 
 	}
-	public List<String> unitedSelectByProblemAndResult(String type,String problemresult,String problem,String content,String result,String corpnName){
+	public List<ShowModel> unitedSelectByProblemAndResult(String type,String problemresult,String problem,String content,String result,String corpnName,int pageIndex,int pageSize){
 		/*
 		String type = model.getType();
     	String inspection = model.getInspection();
@@ -216,35 +283,47 @@ public class AllDaoImp implements AllDao{
     	String corpnName = model.getCorpnName();
     	String problem = model.getProblem();
     	*/
-		List<String> idList = new ArrayList<>();
+		Pageable pageable = new PageRequest(pageIndex,pageSize);
+		List<ShowModel> idList = new ArrayList<>();
 		Pattern pattern = Pattern.compile("^.*"+problemresult+".*$", Pattern.CASE_INSENSITIVE);
     	if(type.equals("Boiler")){
     //		List<Boiler> Blist = mongoTemplate.findAll(Boiler.class, "BoilerCollection");
-    		
-    		List<Boiler> blist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern).and(content).is(result).and("corpnName").is(corpnName)),Boiler.class,"BoilerCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern).and(content).is(result).and("corpnName").is(corpnName));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Boiler> blist = mongoTemplate.find (query,Boiler.class,"BoilerCollection");
     		for(Boiler boiler : blist){
-    			idList.add(boiler.getId());
+    			ShowModel showModel = new ShowModel(boiler);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Crane")){
    // 		List<Crane> clist = mongoTemplate.findAll(Crane.class, "CraneCollection");
-    		List<Crane> clist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern).and(content).is(result).and("corpnName").is(corpnName)),Crane.class,"CraneCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern).and(content).is(result).and("corpnName").is(corpnName));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Crane> clist = mongoTemplate.find (query,Crane.class,"CraneCollection");
     		for(Crane crane : clist){
-    			idList.add(crane.getId());
+    			ShowModel showModel = new ShowModel(crane);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Elevator")){
   //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
-    		List<Elevator> elist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern).and(content).is(result).and("corpnName").is(corpnName)),Elevator.class,"ElevatorCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern).and(content).is(result).and("corpnName").is(corpnName));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Elevator> elist = mongoTemplate.find (query,Elevator.class,"ElevatorCollection");
     		for(Elevator elevator : elist){
-    			idList.add(elevator.getId());
+    			ShowModel showModel = new ShowModel(elevator);
+    			idList.add(showModel);
     		}
     	}
     	return idList;
 
 	}
 	
-	public List<String> unitedSelectByProblemAndResult(String type,String problemresult,String problem,String content,String result){
+	public List<ShowModel> unitedSelectByProblemAndResult(String type,String problemresult,String problem,String content,String result,int pageIndex,int pageSize){
 		/*
 		String type = model.getType();
     	String inspection = model.getInspection();
@@ -253,28 +332,40 @@ public class AllDaoImp implements AllDao{
     	String corpnName = model.getCorpnName();
     	String problem = model.getProblem();
     	*/
-		List<String> idList = new ArrayList<>();
+		Pageable pageable = new PageRequest(pageIndex,pageSize);
+		List<ShowModel> idList = new ArrayList<>();
 		Pattern pattern = Pattern.compile("^.*"+problemresult+".*$", Pattern.CASE_INSENSITIVE);
     	if(type.equals("Boiler")){
     //		List<Boiler> Blist = mongoTemplate.findAll(Boiler.class, "BoilerCollection");
-    		
-    		List<Boiler> blist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern).and(content).is(result)),Boiler.class,"BoilerCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern).and(content).is(result));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Boiler> blist = mongoTemplate.find (query,Boiler.class,"BoilerCollection");
     		for(Boiler boiler : blist){
-    			idList.add(boiler.getId());
+    			ShowModel showModel = new ShowModel(boiler);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Crane")){
    // 		List<Crane> clist = mongoTemplate.findAll(Crane.class, "CraneCollection");
-    		List<Crane> clist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern).and(content).is(result)),Crane.class,"CraneCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern).and(content).is(result));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Crane> clist = mongoTemplate.find (query,Crane.class,"CraneCollection");
     		for(Crane crane : clist){
-    			idList.add(crane.getId());
+    			ShowModel showModel = new ShowModel(crane);
+    			idList.add(showModel);
     		}
     	}
     	if(type.equals("Elevator")){
   //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
-    		List<Elevator> elist = mongoTemplate.find (new Query(Criteria.where(problem).regex(pattern).and(content).is(result)),Elevator.class,"ElevatorCollection");
+    		Query query = new Query(Criteria.where(problem).regex(pattern).and(content).is(result));
+    		query.with(pageable);
+    		query.with(new Sort(Direction.ASC,"id"));
+    		List<Elevator> elist = mongoTemplate.find (query,Elevator.class,"ElevatorCollection");
     		for(Elevator elevator : elist){
-    			idList.add(elevator.getId());
+    			ShowModel showModel = new ShowModel(elevator);
+    			idList.add(showModel);
     		}
     	}
     	return idList;
@@ -283,9 +374,8 @@ public class AllDaoImp implements AllDao{
 	
 	
 	
-	public ResultAndProblem checkResultAndProblem(String type,String content,String corpnName,String id,String problem){
-	//	Boiler boiler = (Boiler) mongoTemplate.find (new Query(Criteria.where("id").is(id).and("corpnName").is(corpnName)),Boiler.class,"BoilerCollection");
-
+	public ResultAndProblem checkResultAndProblem(String type,String content,String corpnName,String id,String problem,int pageIndex,int pageSize){
+		QueryBuilder queryBuilder = new QueryBuilder();
 	    DBObject fieldsObject = new BasicDBObject();
 	    fieldsObject.put("_id", true);
         fieldsObject.put(content, true);
@@ -293,16 +383,48 @@ public class AllDaoImp implements AllDao{
         BasicDBObject dbObject = new BasicDBObject();
         dbObject.put("type", type);
         dbObject.put("_id", id);
-        dbObject.put("corpnName", corpnName);
+        dbObject.put("corpnName",corpnName);
+        queryBuilder.and(dbObject);
+        
+	    ResultAndProblem model = new ResultAndProblem();
+	    Pageable pageable = new PageRequest(pageIndex,pageSize);
+        Query query = new BasicQuery(queryBuilder.get(),fieldsObject);
+   //     System.out.print(query);
+   //     System.out.print(mongoTemplate.find(query, Boiler.class, "BoilerCollection"));
+       query.with(pageable);
+       query.with(new Sort(Direction.ASC,"id"));
+        if(type.equals("Boiler")){
+       List< Boiler> blist =  mongoTemplate.find(query, Boiler.class, "BoilerCollection");	  	      	        
+        for(Boiler b : blist){
+        	String s = JSONObject.toJSONString(b);
+        	Map map = (Map) JSONObject.parse(s);
+        	model.setProblem((String) map.get(problem));
+        	model.setResult((String) map.get(content));
+        }
+       }
+       if(type.equals("Crane")){
+	       List< Crane> clist =  mongoTemplate.find(query, Crane.class, "CraneCollection");	  	      	        
+	        for(Crane b : clist){
+	        	String s = JSONObject.toJSONString(b);
+	        	Map map = (Map) JSONObject.parse(s);
+	        	model.setProblem((String) map.get(problem));
+	        	model.setResult((String) map.get(content));
+	        }
+	       }
+       if(type.equals("Elevator")){
+	       List< Elevator> elist =  mongoTemplate.find(query, Elevator.class, "ElevatorCollection");	  	      	        
+	        for(Elevator b : elist){
+	        	String s = JSONObject.toJSONString(b);
+	        	Map map = (Map) JSONObject.parse(s);
+	        	model.setProblem((String) map.get(problem));
+	        	model.setResult((String) map.get(content));
+	        }
+	       }
 
-        Query query = new BasicQuery(dbObject,fieldsObject);
-        System.out.print(query);
-        ResultAndProblem model = new ResultAndProblem();
-        model.setProblem((String) query.getQueryObject().get(problem));
-        model.setProblem((String) query.getQueryObject().get(content));
+
 		return model;
 	}
-	public ResultAndProblem checkResultAndProblem(String type,String content,String id,String problem){
+	public ResultAndProblem checkResultAndProblem(String type,String content,String id,String problem,int pageIndex,int pageSize){
 		//	Boiler boiler = (Boiler) mongoTemplate.find (new Query(Criteria.where("id").is(id).and("corpnName").is(corpnName)),Boiler.class,"BoilerCollection");
 			QueryBuilder queryBuilder = new QueryBuilder();
 		    DBObject fieldsObject = new BasicDBObject();
@@ -314,22 +436,41 @@ public class AllDaoImp implements AllDao{
 	        dbObject.put("_id", id);
 	        queryBuilder.and(dbObject);
 	        
-
+		    ResultAndProblem model = new ResultAndProblem();
+		    Pageable pageable = new PageRequest(pageIndex,pageSize);
 	        Query query = new BasicQuery(queryBuilder.get(),fieldsObject);
 	   //     System.out.print(query);
 	   //     System.out.print(mongoTemplate.find(query, Boiler.class, "BoilerCollection"));
-	       List< Boiler> blist =  mongoTemplate.find(query, Boiler.class, "BoilerCollection");
-	  
-	        
-	       ResultAndProblem model = new ResultAndProblem();
-	        
+	        query.with(pageable);
+	        query.with(new Sort(Direction.ASC,"id"));
+	        if(type.equals("Boiler")){
+	       List< Boiler> blist =  mongoTemplate.find(query, Boiler.class, "BoilerCollection");	  	      	        
 	        for(Boiler b : blist){
 	        	String s = JSONObject.toJSONString(b);
 	        	Map map = (Map) JSONObject.parse(s);
 	        	model.setProblem((String) map.get(problem));
 	        	model.setResult((String) map.get(content));
 	        }
-	       
+	       }
+	       if(type.equals("Crane")){
+		       List< Crane> clist =  mongoTemplate.find(query, Crane.class, "CraneCollection");	  	      	        
+		        for(Crane b : clist){
+		        	String s = JSONObject.toJSONString(b);
+		        	Map map = (Map) JSONObject.parse(s);
+		        	model.setProblem((String) map.get(problem));
+		        	model.setResult((String) map.get(content));
+		        }
+		       }
+	       if(type.equals("Elevator")){
+		       List< Elevator> elist =  mongoTemplate.find(query, Elevator.class, "ElevatorCollection");	  	      	        
+		        for(Elevator b : elist){
+		        	String s = JSONObject.toJSONString(b);
+		        	Map map = (Map) JSONObject.parse(s);
+		        	model.setProblem((String) map.get(problem));
+		        	model.setResult((String) map.get(content));
+		        }
+		       }
+
 
 			return model;
 		}

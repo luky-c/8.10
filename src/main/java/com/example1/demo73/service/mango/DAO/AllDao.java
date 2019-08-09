@@ -5,7 +5,7 @@ import java.util.List;
 import model.ShowModel;
 
 public interface AllDao {
-	public List<ShowModel> getALL();
+	public List<ShowModel> getALL(int pageIndex,int pageSize);
 	
 
 }

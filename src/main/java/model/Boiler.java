@@ -13,7 +13,7 @@ public class Boiler {
     private String mfAdd;//制造单位地址
     private String prinpal;//单位负责人
     private long phoneNo;//联系电话
-    private long licenceNo;//许可证编号
+    private String licenceNo;//许可证编号
     private String licenseRange;//许可范围
     private String licenseDate;//许可证有效期
     private String eiName;//评审机构名称
@@ -206,11 +206,11 @@ public class Boiler {
         this.phoneNo = phoneNo;
     }
 
-    public long getLicenceNo() {
+    public String getLicenceNo() {
         return licenceNo;
     }
 
-    public void setLicenceNo(long licenseNo) {
+    public void setLicenceNo(String licenseNo) {
         this.licenceNo = licenseNo;
     }
 

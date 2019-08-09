@@ -8,13 +8,28 @@ public class UniteCheckModel {
     private String result;
     private String corpnName;
     private String problem;
-    private String problemresult;
+    private String problemResult;
+    private int pageIndex;
+    private int pageSize;
     
-    public String getProblemresult(){
-    	return this.problemresult;
+    public int getPageIndex(){
+    	return this.pageIndex;
     }
-    public void setProblemresult(String ps){
-    	this.problemresult = ps;
+    public int getPageSize(){
+    	return this.pageSize;
+    }
+    public void setPageIndex(int pageIndex){
+    	this.pageIndex=pageIndex;
+    }
+    public void setPageSize(int pageSize){
+    	this.pageSize=pageSize;
+    }
+    
+    public String getProblemResult(){
+    	return this.problemResult;
+    }
+    public void setProblemResult(String ps){
+    	this.problemResult = ps;
     }
     
     public String getId(){

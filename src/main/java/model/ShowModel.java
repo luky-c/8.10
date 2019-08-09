@@ -3,7 +3,7 @@ package model;
 public class ShowModel {
 	private String corpnName;
 	private String prinpal;
-	private long licenceNo;
+	private String licenceNo;
 	private String type;
 	private String id;
 	
@@ -57,10 +57,10 @@ public class ShowModel {
 		this.prinpal = principal;
 	}
 
-	public Long getLicenceNo() {
+	public String getLicenceNo() {
 		return licenceNo;
 	}
-	public void setLicenceNo(Long licenceNo) {
+	public void setLicenceNo(String licenceNo) {
 		this.licenceNo = licenceNo;
 	}
 }
