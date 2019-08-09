@@ -10,20 +10,16 @@ public class UniteCheckModel {
     private String problem;
     private String problemResult;
     private int pageIndex;
-    private int pageSize;
+    public UniteCheckModel(){}
     
     public int getPageIndex(){
     	return this.pageIndex;
     }
-    public int getPageSize(){
-    	return this.pageSize;
-    }
+    
     public void setPageIndex(int pageIndex){
     	this.pageIndex=pageIndex;
     }
-    public void setPageSize(int pageSize){
-    	this.pageSize=pageSize;
-    }
+    
     
     public String getProblemResult(){
     	return this.problemResult;
