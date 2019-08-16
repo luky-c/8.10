@@ -21,7 +21,7 @@ import model.SelectResult;
 import model.ShowModel;
 
 @RestController
-@RequestMapping("/all")
+@RequestMapping(value = "/all")
 public class AllController {
 	@Autowired
 	private AllDaoImp manager;

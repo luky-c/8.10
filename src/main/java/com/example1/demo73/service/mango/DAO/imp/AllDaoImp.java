@@ -26,6 +26,7 @@ import com.mongodb.QueryBuilder;
 import model.Boiler;
 import model.Crane;
 import model.Elevator;
+import model.ElevatorKeeper;
 import model.ResultAndProblem;
 import model.ShowModel;
 import model.UniteCheckModel;
@@ -45,6 +46,9 @@ public class AllDaoImp implements AllDao{
 	public List<Elevator> getAllElevator(){
 		return mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
 	}
+	public List<ElevatorKeeper> getAllKeeper(){
+		return mongoTemplate.findAll(ElevatorKeeper.class, "KeeperCollection");
+	}
 	
 	@Override
 	public List<ShowModel> getALL(){
@@ -53,6 +57,7 @@ public class AllDaoImp implements AllDao{
 		Query bquery = Query.query(Criteria.where("_class").is("model.Boiler"));
 		Query cquery = Query.query(Criteria.where("_class").is("model.Crane"));
 		Query equery = Query.query(Criteria.where("_class").is("model.Elevator"));
+		Query kquery = Query.query(Criteria.where("_class").is("model.ElevatorKeeper"));
 	/*	bquery.with(pageable);
 		cquery.with(pageable);
 		equery.with(pageable);
@@ -60,10 +65,12 @@ public class AllDaoImp implements AllDao{
 		bquery.with(new Sort(Direction.ASC,"id"));
 		cquery.with(new Sort(Direction.ASC,"id"));
 		equery.with(new Sort(Direction.ASC,"id"));
-	
+		kquery.with(new Sort(Direction.ASC,"id"));
 		List<Boiler> Blist = mongoTemplate.find(bquery,Boiler.class, "BoilerCollection");
 		List<Crane> Clist = mongoTemplate.find(cquery,Crane.class, "CraneCollection");
 		List<Elevator>Elist = mongoTemplate.find(equery,Elevator.class, "ElevatorCollection");
+		List<ElevatorKeeper>Klist = mongoTemplate.find(kquery,ElevatorKeeper.class, "KeeperCollection");
+		System.out.print(Klist.size());
 		for(Boiler boiler : Blist){
 			ShowModel showModel = new ShowModel(boiler);
 			list.add(showModel);
@@ -74,6 +81,10 @@ public class AllDaoImp implements AllDao{
 		}
 		for(Elevator elevator : Elist){
 			ShowModel showModel = new ShowModel(elevator);
+			list.add(showModel);
+		}
+		for(ElevatorKeeper keeper : Klist){
+			ShowModel showModel = new ShowModel(keeper);
 			list.add(showModel);
 		}
 		return list;
@@ -124,6 +135,19 @@ public class AllDaoImp implements AllDao{
     			idList.add(showModel);
     		}
     	}
+    	
+    	
+    	if(type.equals("Keeper")){
+    		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+    		    		Query query = new Query(Criteria.where(content).is(result));
+    		    		query.with(pageable);
+    		    		query.with(new Sort(Direction.ASC,"id"));
+    		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+    		    		for(ElevatorKeeper keeper : klist){
+    		    			ShowModel showModel = new ShowModel(keeper);
+    		    			idList.add(showModel);
+    		    		}
+    		    	}
     	return idList;
 
 	}
@@ -173,6 +197,18 @@ public class AllDaoImp implements AllDao{
     			idList.add(showModel);
     		}
     	}
+    	
+    	if(type.equals("Keeper")){
+    		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+    		    		Query query = new Query(Criteria.where(content).is(result).and("corpnName").is(corpnName));
+    		    		query.with(pageable);
+    		    		query.with(new Sort(Direction.ASC,"id"));
+    		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+    		    		for(ElevatorKeeper keeper : klist){
+    		    			ShowModel showModel = new ShowModel(keeper);
+    		    			idList.add(showModel);
+    		    		}
+    		    	}
     	return idList;
 
 	}
@@ -222,6 +258,17 @@ public class AllDaoImp implements AllDao{
     			idList.add(showModel);
     		}
     	}
+    	if(type.equals("Keeper")){
+    		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+    		    		Query query = new Query(Criteria.where(problem).regex(pattern).and("corpnName").is(corpnName));
+    		    		query.with(pageable);
+    		    		query.with(new Sort(Direction.ASC,"id"));
+    		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+    		    		for(ElevatorKeeper keeper : klist){
+    		    			ShowModel showModel = new ShowModel(keeper);
+    		    			idList.add(showModel);
+    		    		}
+    		    	}
     	return idList;
 
 	}
@@ -273,6 +320,18 @@ public class AllDaoImp implements AllDao{
     			idList.add(showModel);
     		}
     	}
+    	
+    	if(type.equals("Keeper")){
+    		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+    		    		Query query = new Query(Criteria.where(problem).regex(pattern));
+    		    		query.with(pageable);
+    		    		query.with(new Sort(Direction.ASC,"id"));
+    		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+    		    		for(ElevatorKeeper keeper : klist){
+    		    			ShowModel showModel = new ShowModel(keeper);
+    		    			idList.add(showModel);
+    		    		}
+    		    	}
     	return idList;
 
 	}
@@ -322,6 +381,18 @@ public class AllDaoImp implements AllDao{
     		
     	}
     	}
+    	
+    	if(type.equals("Keeper")){
+  		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+  		    		Query query = new Query(Criteria.where(problem).regex(pattern).and(content).is(result).and("corpnName").is(corpnName));
+  		    		query.with(pageable);
+  		    		query.with(new Sort(Direction.ASC,"id"));
+  		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+  		    		for(ElevatorKeeper keeper : klist){
+  		    			ShowModel showModel = new ShowModel(keeper);
+  		    			idList.add(showModel);
+  		    		}
+  		    	}
     	return idList;
     	
 	}
@@ -371,6 +442,19 @@ public class AllDaoImp implements AllDao{
     			idList.add(showModel);
     		}
     	}
+    	
+    	
+    	if(type.equals("Keeper")){
+    		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+    		    		Query query = new Query(Criteria.where(problem).regex(pattern).and(content).is(result));
+    		    		query.with(pageable);
+    		    		query.with(new Sort(Direction.ASC,"id"));
+    		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+    		    		for(ElevatorKeeper keeper : klist){
+    		    			ShowModel showModel = new ShowModel(keeper);
+    		    			idList.add(showModel);
+    		    		}
+    		    	}
     	return idList;
 
 	}
@@ -418,6 +502,15 @@ public class AllDaoImp implements AllDao{
        if(type.equals("Elevator")){
 	       List< Elevator> elist =  mongoTemplate.find(query, Elevator.class, "ElevatorCollection");	  	      	        
 	        for(Elevator b : elist){
+	        	String s = JSONObject.toJSONString(b);
+	        	Map map = (Map) JSONObject.parse(s);
+	        	model.setProblem((String) map.get(problem));
+	        	model.setResult((String) map.get(content));
+	        }
+	       }
+       if(type.equals("Keeper")){
+	       List< ElevatorKeeper> klist =  mongoTemplate.find(query, ElevatorKeeper.class, "KeeperCollection");	  	      	        
+	        for(ElevatorKeeper b : klist){
 	        	String s = JSONObject.toJSONString(b);
 	        	Map map = (Map) JSONObject.parse(s);
 	        	model.setProblem((String) map.get(problem));
@@ -474,7 +567,15 @@ public class AllDaoImp implements AllDao{
 		        	model.setResult((String) map.get(content));
 		        }
 		       }
-
+	       if(type.equals("Keeper")){
+		       List< ElevatorKeeper> klist =  mongoTemplate.find(query, ElevatorKeeper.class, "KeeperCollection");	  	      	        
+		        for(ElevatorKeeper b : klist){
+		        	String s = JSONObject.toJSONString(b);
+		        	Map map = (Map) JSONObject.parse(s);
+		        	model.setProblem((String) map.get(problem));
+		        	model.setResult((String) map.get(content));
+		        }
+		       }
 
 			return model;
 		}
@@ -486,10 +587,11 @@ public class AllDaoImp implements AllDao{
 		Query bquery = Query.query(Criteria.where("_class").is("model.Boiler"));
 		Query cquery = Query.query(Criteria.where("_class").is("model.Crane"));
 		Query equery = Query.query(Criteria.where("_class").is("model.Elevator"));
-		
+		Query kquery = Query.query(Criteria.where("_class").is("model.ElevatorKeeper"));
 		List<Boiler> Blist = mongoTemplate.find(bquery,Boiler.class, "BoilerCollection");
 		List<Crane> Clist = mongoTemplate.find(cquery,Crane.class, "CraneCollection");
 		List<Elevator>Elist = mongoTemplate.find(equery,Elevator.class, "ElevatorCollection");
+		List<ElevatorKeeper>Klist = mongoTemplate.find(kquery,ElevatorKeeper.class, "KeeperCollection");
 		for(Boiler boiler : Blist){
 			ShowModel showModel = new ShowModel(boiler);
 			list.add(showModel);
@@ -500,6 +602,10 @@ public class AllDaoImp implements AllDao{
 		}
 		for(Elevator elevator : Elist){
 			ShowModel showModel = new ShowModel(elevator);
+			list.add(showModel);
+		}
+		for(ElevatorKeeper keeper : Klist){
+			ShowModel showModel = new ShowModel(keeper);
 			list.add(showModel);
 		}
 		return  (long) list.size();
@@ -549,6 +655,18 @@ public class AllDaoImp implements AllDao{
     			idList.add(showModel);
     		}
     	}
+    	
+    	if(type.equals("Keeper")){
+    		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+    		    		Query query = new Query(Criteria.where(content).is(result));
+    		  //  		query.with(pageable);
+    		   // 		query.with(new Sort(Direction.ASC,"id"));
+    		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+    		    		for(ElevatorKeeper keeper : klist){
+    		    			ShowModel showModel = new ShowModel(keeper);
+    		    			idList.add(showModel);
+    		    		}
+    		    	}
     	return (long) idList.size();
 
 	}
@@ -598,6 +716,19 @@ public class AllDaoImp implements AllDao{
     			idList.add(showModel);
     		}
     	}
+    	
+    	
+    	if(type.equals("Keeper")){
+    		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+    		    		Query query = new Query(Criteria.where(content).is(result).and("corpnName").is(corpnName));
+    		  //  		query.with(pageable);
+    		   // 		query.with(new Sort(Direction.ASC,"id"));
+    		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+    		    		for(ElevatorKeeper keeper : klist){
+    		    			ShowModel showModel = new ShowModel(keeper);
+    		    			idList.add(showModel);
+    		    		}
+    		    	}
     	return (long) idList.size();
 
 	}
@@ -647,6 +778,18 @@ public class AllDaoImp implements AllDao{
     			idList.add(showModel);
     		}
     	}
+    	
+    	if(type.equals("Keeper")){
+    		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+    		    		Query query = new Query(Criteria.where(problem).regex(pattern).and("corpnName").is(corpnName));
+    		  //  		query.with(pageable);
+    		   // 		query.with(new Sort(Direction.ASC,"id"));
+    		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+    		    		for(ElevatorKeeper keeper : klist){
+    		    			ShowModel showModel = new ShowModel(keeper);
+    		    			idList.add(showModel);
+    		    		}
+    		    	}
     	return (long) idList.size();
 
 	}
@@ -698,6 +841,19 @@ public class AllDaoImp implements AllDao{
     			idList.add(showModel);
     		}
     	}
+    	
+    	if(type.equals("Keeper")){
+    		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+    		    		Query query = new Query(Criteria.where(problem).regex(pattern));
+    		  //  		query.with(pageable);
+    		   // 		query.with(new Sort(Direction.ASC,"id"));
+    		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+    		    		for(ElevatorKeeper keeper : klist){
+    		    			ShowModel showModel = new ShowModel(keeper);
+    		    			idList.add(showModel);
+    		    		}
+    		    	}
+    	
     	return (long) idList.size();
 
 	}
@@ -747,6 +903,19 @@ public class AllDaoImp implements AllDao{
     		
     	}
     	}
+    	
+    	
+    	if(type.equals("Keeper")){
+  		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+  		    		Query query = new Query(Criteria.where(problem).regex(pattern).and(content).is(result).and("corpnName").is(corpnName));
+  		  //  		query.with(pageable);
+  		   // 		query.with(new Sort(Direction.ASC,"id"));
+  		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+  		    		for(ElevatorKeeper keeper : klist){
+  		    			ShowModel showModel = new ShowModel(keeper);
+  		    			idList.add(showModel);
+  		    		}
+  		    	}
     	return (long) idList.size();
     	
 	}
@@ -796,6 +965,19 @@ public class AllDaoImp implements AllDao{
     			idList.add(showModel);
     		}
     	}
+    	
+    	
+    	if(type.equals("Keeper")){
+    		  //  		List<Elevator> Elist = mongoTemplate.findAll(Elevator.class, "ElevatorCollection");
+    		    		Query query = new Query(Criteria.where(problem).regex(pattern).and(content).is(result));
+    		  //  		query.with(pageable);
+    		   // 		query.with(new Sort(Direction.ASC,"id"));
+    		    		List<ElevatorKeeper> klist = mongoTemplate.find (query,ElevatorKeeper.class,"KeeperCollection");
+    		    		for(ElevatorKeeper keeper : klist){
+    		    			ShowModel showModel = new ShowModel(keeper);
+    		    			idList.add(showModel);
+    		    		}
+    		    	}
     	return (long) idList.size();
 
 	}
@@ -812,6 +994,7 @@ public class AllDaoImp implements AllDao{
 		List<Boiler> Blist = mongoTemplate.find(query, Boiler.class,"BoilerCollection");
 		List<Crane> clist = mongoTemplate.find(query, Crane.class,"CraneCollection");
 		List<Elevator> elist = mongoTemplate.find(query, Elevator.class,"ElevatorCollection");
+		List<ElevatorKeeper> klist = mongoTemplate.find(query, ElevatorKeeper.class,"KeeperCollection");
 		for(Boiler boiler : Blist){
 			
 			
@@ -826,6 +1009,10 @@ public class AllDaoImp implements AllDao{
 		}
 		for(Elevator elevator : elist){
 			ShowModel showModel = new ShowModel(elevator);
+			list.add(showModel);
+		}
+		for(ElevatorKeeper keeper : klist){
+			ShowModel showModel = new ShowModel(keeper);
 			list.add(showModel);
 		}
 		return list;
@@ -841,6 +1028,7 @@ public class AllDaoImp implements AllDao{
 		List<Boiler> Blist = mongoTemplate.find(query, Boiler.class,"BoilerCollection");
 		List<Crane> clist = mongoTemplate.find(query, Crane.class,"CraneCollection");
 		List<Elevator> elist = mongoTemplate.find(query, Elevator.class,"ElevatorCollection");
+		List<ElevatorKeeper> klist = mongoTemplate.find(query, ElevatorKeeper.class,"KeeperCollection");
 		for(Boiler boiler : Blist){
 			
 			
@@ -855,6 +1043,10 @@ public class AllDaoImp implements AllDao{
 		}
 		for(Elevator elevator : elist){
 			ShowModel showModel = new ShowModel(elevator);
+			list.add(showModel);
+		}
+		for(ElevatorKeeper keeper : klist){
+			ShowModel showModel = new ShowModel(keeper);
 			list.add(showModel);
 		}
 		return list;

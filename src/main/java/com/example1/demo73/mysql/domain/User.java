@@ -9,7 +9,7 @@ import javax.persistence.Id;
 @Entity
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	private long id;
 	
 	@Column(nullable = false)
@@ -29,6 +29,9 @@ public class User {
 	}
 	public long getId(){
 		return this.id;
+	}
+	public void setId(long id){
+		this.id = id;
 	}
 	
 

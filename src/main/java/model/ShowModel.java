@@ -31,6 +31,14 @@ public class ShowModel {
 		this.id=elevator.getId();
 	}
 	
+	public ShowModel(ElevatorKeeper keeper){
+		this.corpnName=keeper.getCorpnName();
+		this.prinpal=keeper.getPrinpal();
+		this.licenceNo=keeper.getLicenceNo();
+		this.type=keeper.getType();
+		this.id=keeper.getId();
+	}
+	
     public String getType(){
     	return this.type;
     }
