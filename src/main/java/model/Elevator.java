@@ -1,4 +1,10 @@
 package model;
+
+import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
+
 /*
  *电梯制造单位监督抽查记录表(2019版)
  */
@@ -34,6 +40,10 @@ public class Elevator{
     /*
      * 2.人员
      */
+   @Getter @Setter private List<String> rcPicture_2_1;
+   @Getter @Setter private List<String> rcPicture_2_2;
+   @Getter @Setter private List<String> rcPicture_2_3;
+   @Getter @Setter private List<String> rcPicture_2_4;
     private String rcResult_2_1;// 2.1 检查结果
     private String rcRecord_2_1;// 2.1 记录
 
